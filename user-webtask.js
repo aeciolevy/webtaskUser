@@ -26,7 +26,7 @@ const RESPONSE = {
     status: 'error',
     message: "User doesn't exist"
   }
-  }
+  },
   ERROR: {
     status: "error",
     message: "Something went wrong. Please try again."
@@ -35,19 +35,19 @@ const RESPONSE = {
     OK: {
     status: "ok",
     message: "You have successfully added the group!"
-  },
-  DUPLICATE: {
-    status: "error",
-    message: "This group already exist."
-  },
-  DELETED: {
-    status: 'ok',
-    message: 'Group deleted'
-  },
-  EXIST: {
-    status: 'error',
-    message: "Group doesn't exist"
-  }
+    },
+    DUPLICATE: {
+      status: "error",
+      message: "This group already exist."
+    },
+    DELETED: {
+      status: 'ok',
+      message: 'Group deleted'
+    },
+    EXIST: {
+      status: 'error',
+      message: "Group doesn't exist"
+    }
   }
   }
 };
