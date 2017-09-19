@@ -180,7 +180,7 @@ app.post('/group', function(req, res){
         id = _.size(data.groups.byId) + 1;
       }
       group.id = id;
-      var exist = _.find(data.groups, obj => { return obj.name === user.name}) !== undefined ? true : false;
+      var exist = _.find(data.groups, obj => { return obj.name === group.name}) !== undefined ? true : false;
 
       if(exist){
         res.writeHead(400, { 'Content-Type': 'application/json'});
