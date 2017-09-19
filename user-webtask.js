@@ -172,8 +172,8 @@ app.post('/group', function(req, res){
       }
       data = data || {};
       data.groups = data.groups || {};
-      data.groups.byId = data.groups.byId || {};
-      data.groups.allIds = data.groups.allIds || [];
+      data.groups.byId =  {};
+      data.groups.allIds = [];
       var id;
       if (_.size(data.groups.byId) === 0){
         id = 1;
