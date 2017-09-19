@@ -38,7 +38,7 @@ app.get('/user', function(req, res){
       res.end(JSON.stringify(RESPONSE.ERROR));
     } else {
       // res.writeHead(200, { 'Content-Type': 'application/json'});
-      res.json(data.users);
+      res.json(data.users.byId);
     }
   });
 });
@@ -57,6 +57,8 @@ app.post('/user', function(req, res){
       }
       data = data || {};
       data.users = data.users || {};
+      data.users.byId = {};
+      data.users.allIds = [];
       var id;
       if (_.size(data.users) === 0){
         id = '1';
@@ -64,13 +66,14 @@ app.post('/user', function(req, res){
         id = String(_.size(data.users) + 1);
       }
       user.id = id;
-      var exist = _.find(data.users, obj => { return obj.name === user.name }) !== undefined ? true : false;
+      var exist = _.find(data.users, obj => { return obj.name === user.name}) !== undefined ? true : false;
 
       if(exist){
         res.writeHead(400, { 'Content-Type': 'application/json'});
         res.end(JSON.stringify(RESPONSE.DUPLICATE));
       } else {
-        data.users[id] = user;
+        data.users.byId[id] = user;
+        data.users.allIds.push(id);
         req.webtaskContext.storage.set(data, function(err){
           if(err){
             res.writeHead(400, { 'Content-Type': 'application/json'});
@@ -98,9 +101,10 @@ app.delete('/user', function(req, res) {
         res.writeHead(400, { 'Content-Type': 'application/json'});
         res.end(JSON.stringify(RESPONSE.ERROR));
       }
-      var exist = _.find(data.users, obj => { return obj.id === id }) !== undefined ? true : false;
+      var exist = _.find(data.users, obj => { return obj.id === id}) !== undefined ? true : false;
       if (exist){
-        delete data.users[id];
+        delete data.users.byId[id];
+        data.users.allIds.splice(_.indexOf(data.users.allIds, id), 1);
         req.webtaskContext.storage.set(data, function(err){
           if(err){
             res.writeHead(400, { 'Content-Type': 'application/json'});
