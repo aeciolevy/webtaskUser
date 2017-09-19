@@ -101,7 +101,7 @@ app.delete('/user', function(req, res) {
         res.writeHead(400, { 'Content-Type': 'application/json'});
         res.end(JSON.stringify(RESPONSE.ERROR));
       }
-      var exist = _.find(data.users, obj => { return obj.id === id}) !== undefined ? true : false;
+      var exist = _.find(data.users.byId, obj => { return obj.id === id}) !== undefined ? true : false;
       if (exist){
         delete data.users.byId[String(id)];
         data.users.allIds.splice(_.indexOf(data.users.allIds, id), 1);
