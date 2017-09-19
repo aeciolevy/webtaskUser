@@ -49,7 +49,6 @@ const RESPONSE = {
       message: "Group doesn't exist"
     }
   }
-  }
 };
 
 app.get('/users', function(req, res){
