@@ -60,10 +60,10 @@ app.post('/user', function(req, res){
       data.users.byId = {};
       data.users.allIds = [];
       var id;
-      if (_.size(data.users) === 0){
+      if (_.size(data.users.byId) === 0){
         id = 1;
       } else {
-        id = _.size(data.users) + 1;
+        id = _.size(data.users.byId) + 1;
       }
       user.id = id;
       var exist = _.find(data.users, obj => { return obj.name === user.name}) !== undefined ? true : false;
