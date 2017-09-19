@@ -38,7 +38,7 @@ app.get('/users', function(req, res){
       res.end(JSON.stringify(RESPONSE.ERROR));
     } else {
       // res.writeHead(200, { 'Content-Type': 'application/json'});
-      res.json(data.users.byId);
+      res.json(data.users);
     }
   });
 });
