@@ -186,7 +186,7 @@ app.post('/group', function(req, res){
         res.writeHead(400, { 'Content-Type': 'application/json'});
         res.end(JSON.stringify(RESPONSE.GROUP.DUPLICATE));
       } else {
-        data.groups.byId[id] = user;
+        data.groups.byId[id] = group;
         data.groups.allIds.push(id);
         req.webtaskContext.storage.set(data, function(err){
           if(err){
