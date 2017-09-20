@@ -86,7 +86,7 @@ app.post('/user', function(req, res){
         id = _.size(data.users.byId) + 1;
       }
       user.id = id;
-      var exist = _.find(data.users, obj => { return obj.email === user.email}) !== undefined ? true : false;
+      var exist = _.find(data.users.byId, obj => { return obj.email === user.email}) !== undefined ? true : false;
 
       if(exist){
         res.writeHead(400, { 'Content-Type': 'application/json'});
