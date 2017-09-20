@@ -67,7 +67,6 @@ app.get('/users', function(req, res){
       res.writeHead(400, { 'Content-Type': 'application/json'});
       res.end(JSON.stringify(RESPONSE.ERROR));
     } else {
-      // res.writeHead(200, { 'Content-Type': 'application/json'});
       res.json(data.users);
     }
   });
@@ -161,7 +160,6 @@ app.get('/groups', function(req, res){
       res.writeHead(400, { 'Content-Type': 'application/json'});
       res.end(JSON.stringify(RESPONSE.ERROR));
     } else {
-      res.writeHead(200, { 'Content-Type': 'application/json'});
       res.json(data.groups);
     }
   });
@@ -255,7 +253,6 @@ app.get('/usergroup', function(req, res){
       res.writeHead(400, { 'Content-Type': 'application/json'});
       res.end(JSON.stringify(RESPONSE.ERROR));
     } else {
-      res.writeHead(200, { 'Content-Type': 'application/json'});
       res.json(data.usergroup);
     }
   });
