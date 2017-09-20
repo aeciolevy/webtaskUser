@@ -48,6 +48,16 @@ const RESPONSE = {
       status: 'error',
       message: "Group doesn't exist"
     }
+  },
+  LINK: {
+    OK: {
+    status: "ok",
+    message: "You have successfully added a group to user!"
+    },
+    DUPLICATE: {
+      status: "error",
+      message: "This user is already part of this group."
+    }
   }
 };
 
@@ -57,7 +67,7 @@ app.get('/users', function(req, res){
       res.writeHead(400, { 'Content-Type': 'application/json'});
       res.end(JSON.stringify(RESPONSE.ERROR));
     } else {
-      // res.writeHead(200, { 'Content-Type': 'application/json'});
+      res.writeHead(200, { 'Content-Type': 'application/json'});
       res.json(data.users);
     }
   });
@@ -151,7 +161,7 @@ app.get('/groups', function(req, res){
       res.writeHead(400, { 'Content-Type': 'application/json'});
       res.end(JSON.stringify(RESPONSE.ERROR));
     } else {
-      // res.writeHead(200, { 'Content-Type': 'application/json'});
+      res.writeHead(200, { 'Content-Type': 'application/json'});
       res.json(data.groups);
     }
   });
@@ -180,7 +190,7 @@ app.post('/group', function(req, res){
         id = _.size(data.groups.byId) + 1;
       }
       group.id = id;
-      var exist = _.find(data.groups, obj => { return obj.name === group.name}) !== undefined ? true : false;
+      var exist = _.find(data.groups.byId, obj => { return obj.name === group.name}) !== undefined ? true : false;
 
       if(exist){
         res.writeHead(400, { 'Content-Type': 'application/json'});
@@ -233,6 +243,62 @@ app.delete('/group', function(req, res) {
         res.end(JSON.stringify(RESPONSE.GROUP.EXIST));
       }
     });
+  } else {
+    res.writeHead(200, { 'Content-Type': 'application/json'});
+    res.end(JSON.stringify(RESPONSE.ERROR));
+  }
+});
+
+app.get('/usergroup', function(req, res){
+  req.webtaskContext.storage.get(function(err, data){
+    if(err){
+      res.writeHead(400, { 'Content-Type': 'application/json'});
+      res.end(JSON.stringify(RESPONSE.ERROR));
+    } else {
+      res.writeHead(200, { 'Content-Type': 'application/json'});
+      res.json(data.userGroup);
+    }
+  });
+});
+
+app.post('/usergroup', function(req, res){
+  var usergroup = req.body.usergroup;
+  if (usergroup) {
+    req.webtaskContext.storage.get(function(err, data){
+      if(err){
+        res.writeHead(400, { 'Content-Type': 'application/json'});
+        res.end(JSON.stringify(RESPONSE.ERROR));
+      }
+      data = data || {};
+      data.usergroup = data.usergroup || {};
+      data.usergroup.byId = data.usergroup.byId || {};
+      data.usergroup.allIds = data.usergroup.allIds || [];
+      var id;
+      if (_.size(data.usergroup.byId) === 0){
+        id = 1;
+      } else {
+        id = _.size(data.usergroup.byId) + 1;
+      }
+      usergroup.id = id;
+      var exist = _.find(data.usergroup.byId, obj => {
+        return obj.userId === usergroup.userId && obj.groupId === usergroup.groupId
+      }) !== undefined ? true : false;
+      if (exist) {
+        res.writeHead(400, { 'Content-Type': 'application/json'});
+        res.end(JSON.stringify(RESPONSE.LINK.DUPLICATE));
+      } else {
+        data.usergroup.byId[id] = usergroup;
+        data.usergroup.allIds.push(id);
+        req.webtaskContext.storage.set(data, function(err){
+          if(err){
+            res.writeHead(400, { 'Content-Type': 'application/json'});
+            res.end(JSON.stringify(RESPONSE.ERROR));
+          } else {
+            res.writeHead(200, { 'Content-Type': 'application/json'});
+            res.end(JSON.stringify(RESPONSE.GROUP.OK));
+          }
+        });
+      }
   } else {
     res.writeHead(200, { 'Content-Type': 'application/json'});
     res.end(JSON.stringify(RESPONSE.ERROR));
