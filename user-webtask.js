@@ -261,8 +261,9 @@ app.get('/usergroup', function(req, res){
   });
 });
 
-app.post('/usergroup', function(req, res){
+app.post('/usergroup', function(req, res) {
   var usergroup = req.body.usergroup;
+  
   if (usergroup) {
     req.webtaskContext.storage.get(function(err, data){
       if(err){
@@ -299,6 +300,7 @@ app.post('/usergroup', function(req, res){
           }
         });
       }
+    });
   } else {
     res.writeHead(200, { 'Content-Type': 'application/json'});
     res.end(JSON.stringify(RESPONSE.ERROR));
