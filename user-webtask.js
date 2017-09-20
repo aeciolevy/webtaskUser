@@ -296,7 +296,7 @@ app.post('/usergroup', function(req, res) {
             res.end(JSON.stringify(RESPONSE.ERROR));
           } else {
             res.writeHead(200, { 'Content-Type': 'application/json'});
-            res.end(JSON.stringify(RESPONSE.GROUP.OK));
+            res.end(JSON.stringify(RESPONSE.LINK.OK));
           }
         });
       }
