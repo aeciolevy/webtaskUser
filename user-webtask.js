@@ -77,8 +77,8 @@ app.post('/user', function(req, res){
       }
       data = data || {};
       data.users = data.users || {};
-      data.users.byId = {};
-      data.users.allIds = [];
+      data.users.byId = data.users.byId || {};
+      data.users.allIds = data.users.allIds || [];
       var id;
       if (_.size(data.users.byId) === 0){
         id = 1;
