@@ -256,7 +256,7 @@ app.get('/usergroup', function(req, res){
       res.end(JSON.stringify(RESPONSE.ERROR));
     } else {
       res.writeHead(200, { 'Content-Type': 'application/json'});
-      res.json(data.userGroup);
+      res.json(data.usergroup);
     }
   });
 });
