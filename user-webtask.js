@@ -147,8 +147,7 @@ app.delete('/user', function(req, res) {
             delete data.usergroup.byId[String(index)];
           }
         });
-        data.usergroup.test = _.keys(Number(data.usergroup.byId));
-        
+        data.usergroup.test = _.keys(data.usergroup.byId).map( elem => Number(elem));
          
         req.webtaskContext.storage.set(data, function(err){
           if(err){
