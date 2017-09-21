@@ -1,6 +1,6 @@
 const app = new (require('express'))();
 const wt = require('webtask-tools');
-const _ = require('lodash');
+const _ = require('lodash@4.17.4');
 const bodyParser = require('body-parser');
 
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -57,6 +57,14 @@ const RESPONSE = {
     DUPLICATE: {
       status: "error",
       message: "This user is already part of this group."
+    },
+    DELETED: {
+      status: 'ok',
+      message: 'Group deleted'
+    },
+    EXIST: {
+      status: 'error',
+      message: "User is not associated with this group"
     }
   }
 };
@@ -134,6 +142,15 @@ app.delete('/user', function(req, res) {
       if (exist){
         delete data.users.byId[String(id)];
         data.users.allIds.splice(_.indexOf(data.users.allIds, id), 1);
+        data.usergroup.allIds.forEach( index => {
+           if (data.usergroup.byId[String(index)].userId == id){
+            delete data.usergroup.byId[String(index)];
+            data.usergroup.allIds.splice(_.indexOf(data.usergroup.allIds, index, 1));
+          }
+        });
+          
+        
+         
         req.webtaskContext.storage.set(data, function(err){
           if(err){
             res.writeHead(400, { 'Content-Type': 'application/json'});
@@ -296,6 +313,38 @@ app.post('/usergroup', function(req, res) {
             res.end(JSON.stringify(RESPONSE.LINK.OK));
           }
         });
+      }
+    });
+  } else {
+    res.writeHead(200, { 'Content-Type': 'application/json'});
+    res.end(JSON.stringify(RESPONSE.ERROR));
+  }
+});
+
+app.delete('/usergroup', function(req, res) {
+  var id = req.body.id;
+  if (id) {
+    req.webtaskContext.storage.get(function(err, data){
+      if(err){
+        res.writeHead(400, { 'Content-Type': 'application/json'});
+        res.end(JSON.stringify(RESPONSE.ERROR));
+      }
+      var exist = _.find(data.usergroup.byId, obj => { return obj.id == id}) !== undefined ? true : false;
+      if (exist){
+        delete data.usergroup.byId[String(id)];
+        data.usergroup.allIds.splice(_.indexOf(data.usergroup.allIds, id), 1);
+        req.webtaskContext.storage.set(data, function(err){
+          if(err){
+            res.writeHead(400, { 'Content-Type': 'application/json'});
+            res.end(JSON.stringify(RESPONSE.ERROR));
+          } else {
+            res.writeHead(200, { 'Content-Type': 'application/json'});
+            res.end(JSON.stringify(RESPONSE.LINK.DELETED));
+          }
+        });
+      } else {
+        res.writeHead(200, { 'Content-Type': 'application/json'});
+        res.end(JSON.stringify(RESPONSE.GROUP.EXIST));
       }
     });
   } else {
