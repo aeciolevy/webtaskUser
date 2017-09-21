@@ -247,7 +247,7 @@ app.delete('/group', function(req, res) {
   }
 });
 
-app.get('/usergroup', function(req, res){
+app.get('/usersgroups', function(req, res){
   req.webtaskContext.storage.get(function(err, data){
     if(err){
       res.writeHead(400, { 'Content-Type': 'application/json'});
