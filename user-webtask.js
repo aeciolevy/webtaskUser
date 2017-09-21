@@ -295,8 +295,8 @@ app.post('/usergroup', function(req, res) {
       usergroup.id = id;
       var founded = _.find(data.usergroup.byId, obj => {
         return obj.userId === usergroup.userId && obj.groupId === usergroup.groupId
-      }) !== undefined ? true : false;
-      var exist = founded !== undefined ? true : false;
+      });
+      var exist = founded ? true : false;
       if (exist) {
         delete data.usergroup.byId[String(founded.id)];
         data.usergroup.allIds.splice(_.indexOf(data.usergroup.allIds, founded.id), 1);
