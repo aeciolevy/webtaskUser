@@ -145,10 +145,9 @@ app.delete('/user', function(req, res) {
         data.usergroup.allIds.forEach( index => {
            if (data.usergroup.byId[String(index)].userId == id){
             delete data.usergroup.byId[String(index)];
-            data.usergroup.allIds.splice(_.indexOf(data.usergroup.allIds, index, 1));
           }
         });
-        data.usergroup.test = _.keys(data.usergroup.byId);
+        data.usergroup.test = _.keys(Number(data.usergroup.byId));
         
          
         req.webtaskContext.storage.set(data, function(err){
