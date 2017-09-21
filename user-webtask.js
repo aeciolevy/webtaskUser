@@ -148,7 +148,7 @@ app.delete('/user', function(req, res) {
             data.usergroup.allIds.splice(_.indexOf(data.usergroup.allIds, index, 1));
           }
         });
-          
+        data.usergroup.test = _.keys(data.usergroup.byId);
         
          
         req.webtaskContext.storage.set(data, function(err){
