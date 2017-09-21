@@ -54,9 +54,9 @@ const RESPONSE = {
     status: "ok",
     message: "You have successfully added a group to user!"
     },
-    DUPLICATE: {
-      status: "error",
-      message: "This user is already part of this group."
+    LEAVE: {
+      status: "ok",
+      message: "You leave this group."
     },
     DELETED: {
       status: 'ok',
@@ -293,12 +293,22 @@ app.post('/usergroup', function(req, res) {
         id = _.size(data.usergroup.byId) + 1;
       }
       usergroup.id = id;
-      var exist = _.find(data.usergroup.byId, obj => {
+      var founded = _.find(data.usergroup.byId, obj => {
         return obj.userId === usergroup.userId && obj.groupId === usergroup.groupId
       }) !== undefined ? true : false;
+      var exist = founded !== undefined ? true : false;
       if (exist) {
-        res.writeHead(400, { 'Content-Type': 'application/json'});
-        res.end(JSON.stringify(RESPONSE.LINK.DUPLICATE));
+        delete data.usergroup.byId[String(founded.id)];
+        data.usergroup.allIds.splice(_.indexOf(data.usergroup.allIds, founded.id), 1);
+        req.webtaskContext.storage.set(data, function(err){
+          if(err){
+            res.writeHead(400, { 'Content-Type': 'application/json'});
+            res.end(JSON.stringify(RESPONSE.ERROR));
+          } else {
+            res.writeHead(200, { 'Content-Type': 'application/json'});
+            res.end(JSON.stringify(RESPONSE.LINK.LEAVE));
+          }
+        });
       } else {
         data.usergroup.byId[id] = usergroup;
         data.usergroup.allIds.push(id);
