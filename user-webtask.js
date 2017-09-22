@@ -60,7 +60,7 @@ const RESPONSE = {
     },
     DELETED: {
       status: 'ok',
-      message: 'Group deleted'
+      message: 'User deleted'
     },
     EXIST: {
       status: 'error',
@@ -330,17 +330,19 @@ app.post('/usergroup', function(req, res) {
 });
 
 app.delete('/usergroup', function(req, res) {
-  var id = req.body.id;
-  if (id) {
+  var usergroup = req.body.usergroup;
+  if (usergroup) {
     req.webtaskContext.storage.get(function(err, data){
       if(err){
         res.writeHead(400, { 'Content-Type': 'application/json'});
         res.end(JSON.stringify(RESPONSE.ERROR));
       }
-      var exist = _.find(data.usergroup.byId, obj => { return obj.id == id}) !== undefined ? true : false;
+      var founded = _.find(data.usergroup.byId, 
+      obj => { return obj.userId === usergroup.userId && obj.groupId === usergroup.groupId});
+      var exist = founded ? true : false;
       if (exist){
-        delete data.usergroup.byId[String(id)];
-        data.usergroup.allIds.splice(_.indexOf(data.usergroup.allIds, id), 1);
+        delete data.usergroup.byId[String(founded.id)];
+        data.usergroup.allIds.splice(_.indexOf(data.usergroup.allIds, founded.id), 1);
         req.webtaskContext.storage.set(data, function(err){
           if(err){
             res.writeHead(400, { 'Content-Type': 'application/json'});
@@ -352,7 +354,7 @@ app.delete('/usergroup', function(req, res) {
         });
       } else {
         res.writeHead(200, { 'Content-Type': 'application/json'});
-        res.end(JSON.stringify(RESPONSE.GROUP.EXIST));
+        res.end(JSON.stringify(RESPONSE.LINK.EXIST));
       }
     });
   } else {
